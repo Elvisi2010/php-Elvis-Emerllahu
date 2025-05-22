@@ -3,7 +3,7 @@
 $user="root";
 $pass="";
 $server="localhost";
-$dbname="dbdonjeta";
+$dbname="dbelvis1";
 
 try {
 	//Creating a PDO to connect with database

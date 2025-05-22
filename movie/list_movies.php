@@ -1,9 +1,9 @@
 <?php 
-/*Creating a session  based on a session identifier, passed via a GET or POST request.
+ /*Creating a session  based on a session identifier, passed via a GET or POST request.
   We will include config.php for connection with database.
-  We will fetch all datas from users in database and show them.
-  If a user is admin, he can update or delete a user data.
+  We will fetch all datas from movies in database and show them.
   */
+
 	  session_start();
 
     include_once('config.php');
@@ -12,11 +12,12 @@
           header("Location: login.php");
     }
    
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM movies";
     $selectUsers = $conn->prepare($sql);
     $selectUsers->execute();
 
     $users_data = $selectUsers->fetchAll();
+    
 	
 
  ?>
@@ -58,7 +59,7 @@
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
+      <ul class="nav flex-column">
            <?php if ($_SESSION['is_admin'] == 'true') { ?>
             <li class="nav-item">
               <a class="nav-link" href="home.php">
@@ -78,6 +79,7 @@
               Movies
             </a>
           </li>
+        <?php } ?>
           <li class="nav-item">
             <a class="nav-link" href="bookings.php">
               <span ></span>
@@ -85,24 +87,8 @@
             </a>
           </li>
         </ul>
-        <?php }else {?>
-          <li class="nav-item">
-              <a class="nav-link" href="home.php">
-               
-                Home
-              </a>
-            </li>
-          <li class="nav-item">
-          <a class="nav-link" href="bookings.php">
-            <span ></span>
-            Bookings
-          </a>
-        </li>
-        </ul>
-      <?php
-      } ?>
 
-        
+       
       </div>
     </nav>
 
@@ -114,7 +100,8 @@
 
     <?php if ($_SESSION['is_admin'] == 'true') { ?>
 
-      <h2>Users</h2>
+      <h2>Movies</h2>
+      <a href="movies.php" class="btn btn-primary">Add Movie</a>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -132,13 +119,13 @@
 
                <tr>
                 <td><?php echo $user_data['id']; ?></td>
-                <td><?php echo $user_data['emri']; ?></td>
-                <td><?php echo $user_data['username']; ?></td>
-                <td><?php echo $user_data['email']; ?></td>
-                <!-- If we want to update a user we need to link into editUsers.php -->
-                <td><a href="editUsers.php?id=<?= $user_data['id'];?>">Update</a></td>
-                  <!-- If we want to delete a user we need to link into deleteUsers.php -->
-                <td><a href="deleteUsers.php?id=<?= $user_data['id'];?>">Delete</a></td>
+                <td><?php echo $user_data['movie_name']; ?></td>
+                <td><?php echo $user_data['movie_desc']; ?></td>
+                <td><?php echo $user_data['movie_quality']; ?></td>
+                <!-- If we want to update a movie we created a link which will link us in edit.php file: -->
+                <td><a href="edit.php?id=<?= $user_data['id'];?>">Update</a></td>
+                <!-- If we want to Delete a movie we created a link which will link us in delete.php file -->
+                <td><a href="delete.php?id=<?= $user_data['id'];?>">Delete</a></td>
               </tr>
               
            <?php  } ?>
@@ -147,9 +134,7 @@
           </tbody>
         </table>
       </div>
-     <?php  } else {
-      
-    } ?>
+     <?php } ?>
     </main>
   </div>
 </div>
