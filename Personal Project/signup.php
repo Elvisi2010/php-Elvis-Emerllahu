@@ -1,24 +1,41 @@
-<?php include('db.php'); ?>
-<form method="POST">
-    <h2>Signup</h2>
-    Username: <input type="text" name="username" required><br>
-    Email: <input type="email" name="email" required><br>
-    Password: <input type="password" name="password" required><br>
-    <button type="submit">Sign Up</button>
-</form>
-
 <?php
+include('db.php');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["username"];
+    $username = $_POST["username"];
     $email = $_POST["email"];
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
     $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $name, $email, $password);
+    $stmt->bind_param("sss", $username, $email, $password);
+
     if ($stmt->execute()) {
-        echo "Signup successful. <a href='login.php'>Login here</a>";
+        echo "<p class='success'>Signup successful. <a href='login.php'>Login here</a></p>";
     } else {
-        echo "Signup failed.";
+        echo "<p class='error'>Signup failed: " . $stmt->error . "</p>";
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Signup</h2>
+    <form method="POST">
+        Username: <input type="text" name="username" required><br>
+        Email: <input type="email" name="email" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+    <a href="login.php">Login</a>
+</div>
+
+</body>
+</html>
